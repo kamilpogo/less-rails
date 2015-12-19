@@ -7,14 +7,26 @@ class HelpersSpec < Less::Rails::Spec
   let(:helpers) { dummy_asset('helpers') }
   
   it 'parse asset paths' do
-    line_for_helper('asset-path').must_equal  'asset-path: "/assets/rails.png";'
-    line_for_helper('asset-url').must_equal   "asset-url: url(/assets/rails.png);"
-    line_for_helper('image-path').must_equal  'image-path: "/assets/rails.png";'
-    line_for_helper('image-url').must_equal   "image-url: url(/assets/rails.png);"
-    line_for_helper('video-path').must_equal  'video-path: "/videos/rails.mp4";'
-    line_for_helper('video-url').must_equal   "video-url: url(/videos/rails.mp4);"
-    line_for_helper('audio-path').must_equal  'audio-path: "/audios/rails.mp3";'
-    line_for_helper('audio-url').must_equal   "audio-url: url(/audios/rails.mp3);"
+    if Rails::VERSION::MAJOR >= 4 && Rails::VERSION::MINOR >= 2
+      _digest = Rails.application.assets['rails.png'].digest
+      line_for_helper('asset-path').must_equal  "asset-path: \"/assets/rails-#{_digest}.png\";"
+      line_for_helper('asset-url').must_equal   "asset-url: url(/assets/rails-#{_digest}.png);"
+      line_for_helper('image-path').must_equal  "image-path: \"/assets/rails-#{_digest}.png\";"
+      line_for_helper('image-url').must_equal   "image-url: url(/assets/rails-#{_digest}.png);"
+      line_for_helper('video-path').must_equal  'video-path: "/videos/rails.mp4";'
+      line_for_helper('video-url').must_equal   "video-url: url(/videos/rails.mp4);"
+      line_for_helper('audio-path').must_equal  'audio-path: "/audios/rails.mp3";'
+      line_for_helper('audio-url').must_equal   "audio-url: url(/audios/rails.mp3);"
+    else
+      line_for_helper('asset-path').must_equal  'asset-path: "/assets/rails.png";'
+      line_for_helper('asset-url').must_equal   "asset-url: url(/assets/rails.png);"
+      line_for_helper('image-path').must_equal  'image-path: "/assets/rails.png";'
+      line_for_helper('image-url').must_equal   "image-url: url(/assets/rails.png);"
+      line_for_helper('video-path').must_equal  'video-path: "/videos/rails.mp4";'
+      line_for_helper('video-url').must_equal   "video-url: url(/videos/rails.mp4);"
+      line_for_helper('audio-path').must_equal  'audio-path: "/audios/rails.mp3";'
+      line_for_helper('audio-url').must_equal   "audio-url: url(/audios/rails.mp3);"
+    end
     if Rails::VERSION::MAJOR < 4
       line_for_helper('javascript-path').must_equal  'javascript-path: "/assets/rails.js";'
       line_for_helper('javascript-url').must_equal   "javascript-url: url(/assets/rails.js);"
