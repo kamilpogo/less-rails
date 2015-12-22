@@ -11,8 +11,11 @@ module Less
       config.before_initialize do |app|
         require 'less'
         require 'less-rails'
-        Sprockets::Engines #force autoloading
-        Sprockets.register_engine '.less', LessTemplate
+        #Sprockets::Engines #force autoloading
+        #Sprockets.register_engine '.less', LessTemplate
+        config.assets.configure do |env|
+          env.register_engine('.less', LessTemplate)
+        end
       end
 
       initializer 'less-rails.before.load_config_initializers', :before => :load_config_initializers, :group => :all do |app|
