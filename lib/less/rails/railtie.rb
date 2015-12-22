@@ -14,7 +14,7 @@ module Less
         #Sprockets::Engines #force autoloading
         #Sprockets.register_engine '.less', LessTemplate
         config.assets.configure do |env|
-          env.register_engine('.less', LessTemplate)
+          env.register_engine('.less', LessTemplate) if env.respond_to?('register_engine')
         end
       end
 
